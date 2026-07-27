@@ -814,11 +814,20 @@ src="https://www.facebook.com/tr?id=1890723878286888&amp;ev=PageView&amp;noscrip
     btn.disabled = true;
     btn.textContent = 'Gerando Pix...';
 
-    fetch('api/criar-pix.json', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nome:nome, email:email, telefone:tel, cpf:cpf, endereco:endereco, tracking:getTracking() })
+fetch('api/criar-pix.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type':'application/json'
+    },
+    body: JSON.stringify({
+        nome: nome,
+        email: email,
+        telefone: tel,
+        cpf: cpf,
+        endereco: endereco,
+        tracking: getTracking()
     })
+})
     .then(function(r){ return r.json(); })
     .then(function(d){
       btn.disabled = false;
