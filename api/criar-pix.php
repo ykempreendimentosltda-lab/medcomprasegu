@@ -46,6 +46,19 @@ curl_setopt_array($curl, [
 
 $response = curl_exec($curl);
 
+$http = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+if ($http != 201) {
+
+    echo json_encode([
+        "ok" => false,
+        "http" => $http,
+        "response" => json_decode($response, true)
+    ]);
+
+    exit;
+}
+
 if(curl_errno($curl)){
     echo json_encode([
         "ok"=>false,
@@ -58,17 +71,24 @@ curl_close($curl);
 
 $retorno = json_decode($response,true);
 
-if(
+if (
     isset($retorno["status"]) &&
     $retorno["status"]=="OK" &&
     isset($retorno["pix"]["code"])
 ){
 
+    echo json_encode([
+        "ok" => true,
+        "id" => $retorno["transactionId"],
+        "qrcode" => $retorno["pix"]["code"],
+        "amount" => $valor
+    ]);
+
 }else{
 
     echo json_encode([
-        "ok"=>false,
-        "erro"=>$retorno
+        "ok" => false,
+        "erro" => $retorno
     ]);
 
 }
