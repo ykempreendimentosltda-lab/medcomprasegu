@@ -2,14 +2,14 @@
 
 header('Content-Type: application/json');
 
-$PUBLIC_KEY = 'SUA_PUBLIC_KEY';
-$SECRET_KEY = 'SUA_SECRET_KEY';
+$PUBLIC_KEY = 'kauanpereirabohrer2_vd0gs1uhpr24t84a';
+$SECRET_KEY = 'emxqdzjh3qlnbwd3a3xffih8pyx0x15wy7p8bcr2r57954ki0e0ee8kxia57kyc9';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
 $identifier = uniqid('pedido_');
 
-$valor = 197.00; // coloque o valor do seu checkout
+$valor = 99.00; // coloque o valor do seu checkout
 
 $body = [
     "identifier" => $identifier,
@@ -58,14 +58,11 @@ curl_close($curl);
 
 $retorno = json_decode($response,true);
 
-if(isset($retorno["pix"]["code"])){
-
-    echo json_encode([
-        "ok"=>true,
-        "id"=>$retorno["transactionId"],
-        "qrcode"=>$retorno["pix"]["code"],
-        "amount"=>$valor
-    ]);
+if(
+    isset($retorno["status"]) &&
+    $retorno["status"]=="OK" &&
+    isset($retorno["pix"]["code"])
+){
 
 }else{
 
